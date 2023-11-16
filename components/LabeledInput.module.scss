@@ -1,0 +1,31 @@
+.label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.input {
+  border: 1px solid #55e1e1;
+  border-radius: 10px;
+  width: 300px;
+  padding: 10px;
+  margin-bottom: 5px;
+  transition: all 300ms;
+}
+
+.input::placeholder {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.input:focus {
+  outline: 2px solid #00f2ff;
+}
+
+.success {
+  color: #2abc58;
+  text-align: center;
+}
+
+.failed {
+  color: rgb(249, 79, 79);
+  text-align: center;
+}
