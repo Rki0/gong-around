@@ -1,4 +1,5 @@
-import Table from "@/components/Table/Table";
+import Table from "@/components/table/Table";
+import Quote from "@/assets/quote.svg";
 import { Feed, TableHead } from "@/types/table.ts";
 
 import styles from "./index.module.scss";
@@ -31,7 +32,11 @@ const CommunityPage = (props: CommunityPageProps) => {
 
   return (
     <section className={styles.section}>
-      <h1>Community</h1>
+      <h1>
+        <span>커뮤니티</span>
+
+        <Quote />
+      </h1>
 
       <Table heads={TABLE_HEADS} feeds={feeds} />
     </section>
@@ -128,9 +133,12 @@ export async function getStaticProps() {
     },
   ];
 
+  const repeat = (arr: any, n: number) => new Array(n).fill(arr).flat();
+
   return {
     props: {
-      feeds: feeds,
+      // feeds: feeds,
+      feeds: repeat(feeds, 12),
     },
     revalidate: 10,
   };
