@@ -5,9 +5,12 @@ import TextInput from "@/components/input/TextInput";
 import DateInput from "@/components/input/DateInput";
 import FileInput from "@/components/input/FileInput";
 import TextArea from "@/components/textArea/TextArea";
+import LocationInput from "@/components/input/LocationInput";
 import Button from "@/components/button/Button";
+import getGeoCoordinate from "@/utils/getGeoCoordinate";
 
 import styles from "./index.module.scss";
+import { useRouter } from "next/router";
 
 interface InitialState {
   [key: string]: any;
@@ -57,8 +60,20 @@ function CreateFeedPage() {
     []
   );
 
-  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+  const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const geo = await getGeoCoordinate(formState.location);
+
+    // TODO: replace location which in fetch API body with newLocation
+    const newLocation = {
+      ...geo,
+      address: formState.location,
+    };
+
+    console.log(formState, newLocation);
+
+    return;
 
     // TODO: 입력값 검증 로직 필요
 
@@ -99,6 +114,12 @@ function CreateFeedPage() {
     }
   };
 
+  const router = useRouter();
+
+  const cancelHandler = () => {
+    router.back();
+  };
+
   return (
     <section className={styles.section}>
       <Form onSubmitHandler={submitHandler}>
@@ -106,8 +127,10 @@ function CreateFeedPage() {
 
         <DateInput label="날짜" target="date" onInput={inputChangeHandler} />
 
-        <TextInput
-          label="위치"
+        {/* TODO: 어떤 나라, 어떤 공항에 대한 것인지 선택할 수 있도록 하자. */}
+
+        <LocationInput
+          label="장소"
           target="location"
           onInput={inputChangeHandler}
         />
@@ -120,7 +143,9 @@ function CreateFeedPage() {
           onInput={inputChangeHandler}
         />
 
-        <Button type="button">취소</Button>
+        <Button type="button" onClickHandler={cancelHandler}>
+          취소
+        </Button>
         <Button type="submit">등록</Button>
       </Form>
     </section>
