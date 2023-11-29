@@ -35,7 +35,7 @@ const Table = (props: TableProps) => {
   const totalPageNumber = Math.ceil(feeds.length / limitPerPage);
 
   return (
-    <div>
+    <div className={styles.table_div}>
       <table className={styles.table}>
         <TableHeads heads={heads} />
 

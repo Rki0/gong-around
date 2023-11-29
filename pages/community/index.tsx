@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+
 import Table from "@/components/table/Table";
 import Quote from "@/assets/quote.svg";
 import { Feed, TableHead } from "@/types/table.ts";
@@ -15,7 +18,7 @@ const TABLE_HEADS: TableHead[] = [
   },
   {
     id: 2,
-    name: "날짜",
+    name: "날짜", // SUGGEST: 여행을 간 날짜가 중요하지, 게시물을 올린 날짜가 중요한건 아닌 것 같은데...
   },
   {
     id: 3,
@@ -30,6 +33,64 @@ const TABLE_HEADS: TableHead[] = [
 const CommunityPage = (props: CommunityPageProps) => {
   const { feeds } = props;
 
+  const [searchInput, setSearchInput] = useState("");
+  const [filteredFeeds, setFilteredFeeds] = useState<Feed[]>(feeds);
+
+  const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(e.target.value);
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      // debounced search action
+    }, 300);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [searchInput]);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const routerChangeCompleteHandler = () => {
+      console.log("router changed occured!");
+
+      // TODO: please add try/catch handling
+      // const response = await fetch(
+      //   `${process.env.NEXT_PUBLIC_APP_BACKEND}/feeds/${searchInput}`
+      // );
+      // const data = await response.json();
+
+      // setFilteredFeeds(data);
+    };
+
+    router.events.on("routeChangeComplete", routerChangeCompleteHandler);
+
+    return () => {
+      router.events.off("routeChangeComplete", routerChangeCompleteHandler);
+    };
+  }, [router]);
+
+  const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (searchInput === "") {
+      router.push({
+        pathname: "/community",
+      });
+
+      return;
+    }
+
+    router.push({
+      pathname: "/community",
+      query: {
+        keyword: searchInput,
+      },
+    });
+  };
+
   return (
     <section className={styles.section}>
       <h1>
@@ -38,7 +99,20 @@ const CommunityPage = (props: CommunityPageProps) => {
         <Quote />
       </h1>
 
-      <Table heads={TABLE_HEADS} feeds={feeds} />
+      <form onSubmit={onSubmitHandler}>
+        <input
+          value={searchInput}
+          onChange={onChangeHandler}
+          placeholder="제목을 검색해보세요."
+        />
+
+        <button type="submit">검색</button>
+      </form>
+
+      {/* TODO: 최신순(default), 좋아요순, 조회수순  */}
+
+      {/* <Table heads={TABLE_HEADS} feeds={feeds} /> */}
+      <Table heads={TABLE_HEADS} feeds={filteredFeeds} />
     </section>
   );
 };

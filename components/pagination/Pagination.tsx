@@ -10,6 +10,8 @@ interface PaginationProps {
   currentPage: number;
 }
 
+// FIXME: 한 페이지에 게시물이 10개가 아니라면 UI가 위아래로 줄어드는 문제
+// FIXME: 상세 페이지에 들어갔다가 나오면 페이지네이션이 1로 초기화되는 문제(페이지네이션을 프론트에서 처리해서 그런 것.)
 function Pagination(props: PaginationProps) {
   const { totalPageNumber, setCurrentPage, currentPage } = props;
 
@@ -29,7 +31,7 @@ function Pagination(props: PaginationProps) {
   // start index of pagination
   const offset = useMemo(() => {
     // why currentPagination - 1 ?
-    // if you use only currentPagination, it will change offset when pagination is 10.
+    // if you use just currentPagination, it will change offset when pagination is 10.
     return (
       Math.floor((currentPagination - 1) / limitPaginationAmount) *
       limitPaginationAmount
@@ -65,12 +67,18 @@ function Pagination(props: PaginationProps) {
   };
 
   return (
-    <div>
+    <div className={styles.pagination}>
       <ArrowButton direction="left" onClickHandler={backwardClickHandler} />
 
       <ol className={styles.list_body}>
         {showingPagination.map((page, index) => (
-          <li key={index} onClick={() => pageClickHandler(page)}>
+          <li
+            key={index}
+            onClick={() => pageClickHandler(page)}
+            className={`${styles.list_item} ${
+              currentPage === page ? styles.activated_page : undefined
+            }`}
+          >
             {page}
           </li>
         ))}
