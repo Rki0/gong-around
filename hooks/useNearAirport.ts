@@ -5,7 +5,7 @@ import airportData from "@/data/airport.json";
 interface Airport {
   name_ko: string;
   lat: number;
-  lon: number;
+  lng: number;
 }
 
 interface CountryAirports {
@@ -17,9 +17,20 @@ interface AirportsData {
   japan: CountryAirports;
 }
 
+interface UserLocation {
+  lat: number;
+  lng: number;
+}
+
+interface NearestAirportInfo {
+  lat: number;
+  lng: number;
+  name: string;
+}
+
 let lat: number;
-let lon: number;
-let nearestAirport: null | string = null;
+let lng: number;
+let nearestAirport: null | NearestAirportInfo = null;
 let shortestDistance: null | number = null;
 
 const calculateNearestAirport = (iterObj: CountryAirports) => {
@@ -27,29 +38,39 @@ const calculateNearestAirport = (iterObj: CountryAirports) => {
     const airportInfo: Airport = iterObj[airport];
 
     const gapOfLat = lat - airportInfo.lat;
-    const gapOfLon = lon - airportInfo.lon;
+    const gapOfLng = lng - airportInfo.lng;
 
-    const distance = Math.sqrt(Math.pow(gapOfLat, 2) + Math.pow(gapOfLon, 2));
+    const distance = Math.sqrt(Math.pow(gapOfLat, 2) + Math.pow(gapOfLng, 2));
 
+    // initialize
     if (!shortestDistance) {
       shortestDistance = distance;
-      nearestAirport = airportInfo.name_ko;
+      nearestAirport = {
+        lat: airportInfo.lat,
+        lng: airportInfo.lng,
+        name: airportInfo.name_ko,
+      };
       continue;
     }
 
     if (distance < shortestDistance) {
       shortestDistance = distance;
-      nearestAirport = airportInfo.name_ko;
+      nearestAirport = {
+        lat: airportInfo.lat,
+        lng: airportInfo.lng,
+        name: airportInfo.name_ko,
+      };
     }
   }
 };
 
 export const useNearAirport = () => {
-  const [userLocation, setUserLocation] = useState<string | null>(null);
+  const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
+  const [airport, setAirport] = useState<NearestAirportInfo | null>(null);
 
   const success = (position: GeolocationPosition) => {
     lat = position.coords.latitude;
-    lon = position.coords.longitude;
+    lng = position.coords.longitude;
 
     for (const country in airportData) {
       const countryObj = airportData[country as keyof AirportsData];
@@ -57,7 +78,11 @@ export const useNearAirport = () => {
       calculateNearestAirport(countryObj);
     }
 
-    setUserLocation(nearestAirport);
+    setUserLocation({
+      lat,
+      lng,
+    });
+    setAirport(nearestAirport);
   };
 
   const error = () => {
@@ -79,5 +104,6 @@ export const useNearAirport = () => {
     });
   }, []);
 
-  return userLocation;
+  // return { lat, lng, userLocation };
+  return { userLocation, airport };
 };
