@@ -12,15 +12,21 @@ interface TitlesProps {
   fadeInDuration: number;
 }
 
+interface UserLocation {
+  lat: number;
+  lng: number;
+}
+
+interface NearestAirportInfo {
+  lat: number;
+  lng: number;
+  name: string;
+}
+
 const SearchLink = ({ titleArrayLength, fadeInDuration }: TitlesProps) => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
-  const [userLocation, setUserLocation] = useState<string | null>(null);
 
-  const nearestAirport = useNearAirport();
-
-  useEffect(() => {
-    setUserLocation(nearestAirport);
-  }, [nearestAirport]);
+  const { userLocation, airport } = useNearAirport();
 
   const blockLinkFunc = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -56,7 +62,14 @@ const SearchLink = ({ titleArrayLength, fadeInDuration }: TitlesProps) => {
       onVisibilityChange={observeOpacity}
     >
       <Link
-        href="/map"
+        // href="/map"
+        href={{
+          pathname: "/map",
+          query: {
+            lat: airport?.lat,
+            lng: airport?.lng,
+          },
+        }}
         className={`${styles.link_common_style} ${
           isVisible ? styles.link_able : styles.link_disabled
         }`}
@@ -64,8 +77,8 @@ const SearchLink = ({ titleArrayLength, fadeInDuration }: TitlesProps) => {
       >
         <Satellite className={styles.satellite} />
 
-        {nearestAirport ? (
-          <p>{userLocation} 공항 주변에서 탐색하기</p>
+        {airport ? (
+          <p>{airport.name} 공항 주변에서 탐색하기</p>
         ) : (
           <p>위치 탐색 중...</p>
         )}
