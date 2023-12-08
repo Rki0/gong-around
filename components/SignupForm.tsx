@@ -1,8 +1,7 @@
 import { useReducer } from "react";
-import { useRouter } from "next/router";
-// import axios from "axios";
 
 import LabeledInput from "./LabeledInput";
+import useSignUpQuery from "@/query/useSignUpQuery";
 
 import styles from "./SignupForm.module.scss";
 
@@ -212,8 +211,6 @@ const reducer = (state: State, action: Action): State => {
 const SignupForm = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const router = useRouter();
-
   const onChangeHandler =
     (type: Action["type"]) => (e: React.ChangeEvent<HTMLInputElement>) => {
       dispatch({ type, payload: e.target.value });
@@ -224,6 +221,9 @@ const SignupForm = () => {
     dispatch({ type: "SET_BLURRED", payload: e.target.name });
   };
 
+  const signUpMutation = useSignUpQuery();
+
+  // SUGGEST: this function can be more abstracted through combining with signUp function which in the useSignUpQuery.ts
   const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -240,25 +240,16 @@ const SignupForm = () => {
     }
 
     const userData = {
-      name: state.name.value,
+      nickname: state.name.value,
       email: state.email.value,
       password: state.password.value,
     };
 
-    // try {
-    //   const response = await axios.post(
-    //     `${import.meta.env.VITE_BASE_URL}/auth/signup`,
-    //     userData
-    //   );
-
-    //   if (response.status >= 200 && response.status < 300) {
-    //     alert("회원가입이 완료되었습니다. 로그인 창으로 이동합니다.");
-
-    //     router.push("/login");
-    //   }
-    // } catch (err) {
-    //   console.log(err);
-    // }
+    try {
+      signUpMutation(userData);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
