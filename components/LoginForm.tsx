@@ -1,14 +1,12 @@
 import { useState } from "react";
-import { useRouter } from "next/router";
-// import axios from "axios";
+
+import useLogInQuery from "@/query/useLogInQuery";
 
 import styles from "./LoginForm.module.scss";
 
 const LoginForm = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-
-  // const router = useRouter();
 
   const onEmailChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -18,6 +16,9 @@ const LoginForm = () => {
     setPassword(e.target.value);
   };
 
+  const logInMutation = useLogInQuery();
+
+  // SUGGEST: this function can be more abstracted through combining with logIn function which in the useLogInQuery.ts
   const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -30,18 +31,11 @@ const LoginForm = () => {
       password,
     };
 
-    // try {
-    //   const response = await axios.post(
-    //     `${import.meta.env.VITE_BASE_URL}/auth/login`,
-    //     userData
-    //   );
-
-    //   if (response.status >= 200 && response.status < 300) {
-    //     router.push("/");
-    //   }
-    // } catch (err) {
-    //   console.log(err);
-    // }
+    try {
+      logInMutation(userData);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
