@@ -21,21 +21,38 @@
   padding: 10px;
 }
 
+.hamburger_menu {
+}
+
 .hamburger_menu_list {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   font-size: 20px;
+  list-style: none;
 
-  a {
+  li {
     width: 100%;
-    padding: 15px 0 15px 10px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-    transition: all 300ms;
-  }
+    height: 100%;
 
-  a:hover {
-    color: #00eaff;
+    button {
+      all: unset;
+    }
+
+    a,
+    button {
+      display: block;
+      width: 100%;
+      height: 100%;
+      padding: 15px 0 15px 10px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+      transition: all 300ms;
+    }
+
+    a:hover,
+    button:hover {
+      color: #00eaff;
+    }
   }
 }
 
