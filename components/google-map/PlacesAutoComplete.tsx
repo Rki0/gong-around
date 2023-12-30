@@ -6,8 +6,11 @@ import React from "react";
 import usePlacesAutocomplete from "use-places-autocomplete";
 
 import getGeoCoordinate from "@/utils/getGeoCoordinate";
+import DeleteIcon from "@/assets/delete.svg";
 
 import { Coordinate } from "@/types/coordinate";
+
+import styles from "./PlacesAutoComplete.module.scss";
 
 interface PlacesAutoCompleteProps {
   setMapCenter: React.Dispatch<React.SetStateAction<Coordinate | undefined>>;
@@ -42,17 +45,28 @@ function PlacesAutoComplete(props: PlacesAutoCompleteProps) {
     // TODO: api call to get top nearest feeds from the "coordData" and set MapPage setMarkers state
   };
 
-  return (
-    <div>
-      <input
-        type="text"
-        value={value}
-        onChange={onChangeHandler}
-        disabled={!ready}
-        placeholder="장소를 검색해보세요."
-      />
+  const deleteClickHandler = () => {
+    setValue("");
+  };
 
-      <ul>
+  return (
+    <div className={styles.auto_div}>
+      <div className={styles.input_div}>
+        <input
+          type="text"
+          value={value}
+          onChange={onChangeHandler}
+          disabled={!ready}
+          placeholder="장소를 검색해보세요."
+          className={styles.input}
+        />
+
+        <div className={styles.delete_icon} onClick={deleteClickHandler}>
+          <DeleteIcon />
+        </div>
+      </div>
+
+      <ul className={styles.ul}>
         {status === "OK" &&
           data.map(({ place_id, description }) => (
             <li key={place_id} onClick={onClickHandler}>
