@@ -1,11 +1,11 @@
-import React, { useMemo, useState } from "react";
+import React from "react";
 
 import TableHeads from "./TableHeads";
 import TableBody from "./TableBody";
-import Pagination from "../pagination/Pagination";
 import { Feed, TableHead } from "@/types/table";
 
 import styles from "./Table.module.scss";
+import { useRouter } from "next/router";
 
 interface TableProps {
   heads: TableHead[];
@@ -15,38 +15,35 @@ interface TableProps {
 const Table = (props: TableProps) => {
   const { heads, feeds } = props;
 
-  // amount of feeds per page
-  const limitPerPage = useMemo(() => {
-    return 10;
-  }, []);
+  const router = useRouter();
 
-  // current page number
-  const [currentPage, setCurrentPage] = useState(1);
-
-  // first feed index per page
-  const offset = useMemo(() => {
-    return (currentPage - 1) * limitPerPage;
-  }, [currentPage, limitPerPage]);
-
-  // feeds which want to show
-  const currentPageFeeds = feeds.slice(offset, offset + limitPerPage);
-
-  // amount of page
-  const totalPageNumber = Math.ceil(feeds.length / limitPerPage);
+  // SUGGEST: If query was changed, React-Query should fetch filtered data.
+  // sort는 backend에서 정렬에만 영향을 주기 때문에 분기처리를 할 필요는 없음. 기본값이랑 입력값의 경우만 잘 따지면 됨.
+  const optionChangeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    router.push({
+      pathname: "/community",
+      query: {
+        ...router.query,
+        sort: e.target.value,
+      },
+    });
+  };
 
   return (
     <div className={styles.table_div}>
+      <div className={styles.sort_select}>
+        <select name="feed-sort" id="feed-sort" onChange={optionChangeHandler}>
+          <option value="date">최신순</option>
+          <option value="like">좋아요순</option>
+          <option value="view">조회수순</option>
+        </select>
+      </div>
+
       <table className={styles.table}>
         <TableHeads heads={heads} />
 
-        <TableBody feeds={currentPageFeeds} />
+        <TableBody feeds={feeds} />
       </table>
-
-      <Pagination
-        totalPageNumber={totalPageNumber}
-        setCurrentPage={setCurrentPage}
-        currentPage={currentPage}
-      />
     </div>
   );
 };

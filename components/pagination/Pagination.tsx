@@ -1,51 +1,35 @@
-import React, { useMemo, useState } from "react";
+import React from "react";
+import { useRouter } from "next/router";
 
 import ArrowButton from "./ArrowButton";
 
 import styles from "./Pagination.module.scss";
 
 interface PaginationProps {
-  totalPageNumber: number;
-  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
-  currentPage: number;
+  paginationStartNum: number;
+  paginationEndNum: number;
+  totalPageNum: number;
+  hasMore: boolean;
 }
 
-// FIXME: 한 페이지에 게시물이 10개가 아니라면 UI가 위아래로 줄어드는 문제
-// FIXME: 상세 페이지에 들어갔다가 나오면 페이지네이션이 1로 초기화되는 문제(페이지네이션을 프론트에서 처리해서 그런 것.)
 function Pagination(props: PaginationProps) {
-  const { totalPageNumber, setCurrentPage, currentPage } = props;
+  const { paginationStartNum, paginationEndNum, totalPageNum, hasMore } = props;
 
-  // showing amount of pagination at once
-  const limitPaginationAmount = useMemo(() => {
-    return 10;
-  }, []);
+  const router = useRouter();
+  const currentPage = parseInt(router.query.page as string, 10);
 
-  // current selected pagination
-  const [currentPagination, setCurrentPagination] = useState(1);
-
-  // pagination array
-  const paginationArray = Array.from({ length: totalPageNumber })
-    .fill(0)
-    .map((_, index) => index + 1);
-
-  // start index of pagination
-  const offset = useMemo(() => {
-    // why currentPagination - 1 ?
-    // if you use just currentPagination, it will change offset when pagination is 10.
-    return (
-      Math.floor((currentPagination - 1) / limitPaginationAmount) *
-      limitPaginationAmount
-    );
-  }, [currentPagination, limitPaginationAmount]);
-
-  // current showing pagination
-  const showingPagination = paginationArray.slice(
-    offset,
-    offset + limitPaginationAmount
+  const paginationArr = Array.from(
+    { length: paginationEndNum - paginationStartNum + 1 },
+    (_, i) => paginationStartNum + i
   );
 
   const pageClickHandler = (page: number) => {
-    setCurrentPage(page);
+    router.push({
+      pathname: "/community",
+      query: {
+        page,
+      },
+    });
   };
 
   const backwardClickHandler = () => {
@@ -53,17 +37,29 @@ function Pagination(props: PaginationProps) {
       return;
     }
 
-    setCurrentPagination((prev) => prev - 1);
-    setCurrentPage((prev) => prev - 1);
+    router.push({
+      pathname: "/community",
+      query: {
+        page: currentPage - 1,
+      },
+    });
   };
 
   const forwardClickHandler = () => {
-    if (currentPage === totalPageNumber) {
+    if (currentPage === totalPageNum) {
       return;
     }
 
-    setCurrentPagination((prev) => prev + 1);
-    setCurrentPage((prev) => prev + 1);
+    if (!hasMore) {
+      return;
+    }
+
+    router.push({
+      pathname: "/community",
+      query: {
+        page: currentPage + 1,
+      },
+    });
   };
 
   return (
@@ -71,7 +67,7 @@ function Pagination(props: PaginationProps) {
       <ArrowButton direction="left" onClickHandler={backwardClickHandler} />
 
       <ol className={styles.list_body}>
-        {showingPagination.map((page, index) => (
+        {paginationArr.map((page, index) => (
           <li
             key={index}
             onClick={() => pageClickHandler(page)}

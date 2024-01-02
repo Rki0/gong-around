@@ -32,9 +32,11 @@ function TableBody(props: TableBodyProps) {
   return (
     <tbody>
       {feeds.map((feed) => (
-        <tr key={feed.id} data-id={feed.id} onClick={tableRowClickHandler}>
-          <td>{feed.title}</td>
-          <td>{feed.date}</td>
+        <tr key={feed._id} data-id={feed._id} onClick={tableRowClickHandler}>
+          <td>
+            <p>{feed.title}</p>({feed.commentsCount + feed.subCommentsCount})
+          </td>
+          <td>{feed.createdAt.split("T")[0]}</td>
           <td>{feed.like}</td>
           <td>{feed.view}</td>
         </tr>

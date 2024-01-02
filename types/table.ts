@@ -1,9 +1,12 @@
 export interface Feed {
-  id: number;
-  title: string;
-  date: string;
+  createdAt: string;
+  description: string;
   like: number;
+  title: string;
   view: number;
+  _id: string;
+  commentsCount: number;
+  subCommentsCount: number;
 }
 
 export interface TableHead {
