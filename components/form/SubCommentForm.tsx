@@ -5,17 +5,18 @@ import CommentTextarea from "../textArea/CommentTextarea";
 import Button from "../button/Button";
 import { AuthContext } from "@/context/authContext";
 
-import { PostedComment, PostedSubComment } from "@/types/comment";
+import { PostedSubComment } from "@/types/comment";
 
-import styles from "./CommentForm.module.scss";
+import styles from "./SubCommentForm.module.scss";
 
-interface CommentFormProps {
+interface SubCommentFormProps {
   name: string;
   textPlaceholder: string;
-  mutate: UseMutateFunction<void, Error, PostedComment, unknown>;
+  mutate: UseMutateFunction<void, Error, PostedSubComment, unknown>;
+  parentCommentId: string;
 }
 
-function CommentForm(props: CommentFormProps) {
+function SubCommentForm(props: SubCommentFormProps) {
   const [commentText, setCommentText] = useState("");
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -33,6 +34,7 @@ function CommentForm(props: CommentFormProps) {
 
     props.mutate({
       description: commentText,
+      parentCommentId: props.parentCommentId,
     });
 
     setCommentText("");
@@ -40,7 +42,7 @@ function CommentForm(props: CommentFormProps) {
 
   return (
     <form
-      className={styles.comment_form}
+      className={styles.subComment_form}
       name={props.name}
       onSubmit={submitHandler}
     >
@@ -60,4 +62,4 @@ function CommentForm(props: CommentFormProps) {
   );
 }
 
-export default CommentForm;
+export default SubCommentForm;

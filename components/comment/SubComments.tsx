@@ -1,17 +1,19 @@
 import React from "react";
 
 import SubComment from "./SubComment";
-import { CommentType } from "@/types/comment.ts";
+import { SubCommentType } from "@/types/comment.ts";
+
+import styles from "./SubComments.module.scss";
 
 interface SubCommentsProps {
-  comments: CommentType[];
+  subComments: SubCommentType[];
 }
 
 function SubComments(props: SubCommentsProps) {
   return (
-    <div>
-      {props.comments.map((subComment) => (
-        <SubComment key={subComment.id} subComment={subComment} />
+    <div className={styles.subComments_div}>
+      {props.subComments.map((subComment) => (
+        <SubComment key={subComment._id} subComment={subComment} />
       ))}
     </div>
   );

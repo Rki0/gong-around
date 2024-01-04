@@ -1,9 +1,19 @@
 .carousel {
   display: flex;
+  flex-direction: column;
   align-items: center;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.slide_section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .slide_btn {
+  all: unset;
 }
 
 .view_frame {

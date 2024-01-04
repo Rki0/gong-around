@@ -5,18 +5,20 @@ import React, { useState } from "react";
 import Image from "next/image";
 
 import Pagination from "./Pagination";
+import RightIcon from "@/assets/right.svg";
+import LeftIcon from "@/assets/left.svg";
 
 import { ImageAttribute } from "@/types/image.ts";
 
 import styles from "./CarouselSlide.module.scss";
 
 interface CarouselSlideProps {
-  // images: ImageAttribute[] | ImageAttribute;
   images: ImageAttribute[];
 }
 
 function CarouselSlide(props: CarouselSlideProps) {
   const { images } = props;
+
   const copiedImages = [
     { ...images[images.length - 1], id: 0 },
     ...images,
@@ -84,45 +86,77 @@ function CarouselSlide(props: CarouselSlideProps) {
     }, 500);
   };
 
+  if (images.length === 0) {
+    return;
+  }
+
+  if (images.length === 1) {
+    return (
+      <div key={images[0]._id} className={styles.image_div}>
+        <Image
+          src={images[0].path}
+          alt="image about feed"
+          width={500}
+          height={500}
+          placeholder="blur"
+          blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
+        />
+      </div>
+    );
+  }
+
   return (
     <div className={styles.carousel}>
-      <div className={styles.slide_btn}>
-        <button onClick={throttledLeftClickHandler}>Left</button>
-      </div>
-
-      <div className={styles.view_frame}>
-        <div
-          className={styles.image_film}
-          style={{
-            transition,
-            transform: `translateX(${
-              -1 * ((100 / copiedImages.length) * slideIndex)
-            }%)`,
-          }}
-        >
-          {copiedImages.map((image) => (
-            <div key={image.id} className={styles.image_div}>
-              <Image
-                src={image.src}
-                alt={image.alt}
-                width={500}
-                height={500}
-                placeholder="blur"
-                blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
-              />
-            </div>
-          ))}
+      <div className={styles.slide_section}>
+        <div>
+          <button
+            className={styles.slide_btn}
+            onClick={throttledLeftClickHandler}
+          >
+            <LeftIcon />
+          </button>
         </div>
-      </div>
 
-      <div>
-        <button onClick={throttledRightClickHandler}>Right</button>
+        <div className={styles.view_frame}>
+          <div
+            className={styles.image_film}
+            style={{
+              transition,
+              transform: `translateX(${
+                -1 * ((100 / copiedImages.length) * slideIndex)
+              }%)`,
+            }}
+          >
+            {copiedImages.map((image) => (
+              <div key={image._id} className={styles.image_div}>
+                <Image
+                  src={image.path}
+                  alt="image about feed"
+                  width={500}
+                  height={500}
+                  placeholder="blur"
+                  blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <button
+            className={styles.slide_btn}
+            onClick={throttledRightClickHandler}
+          >
+            <RightIcon />
+          </button>
+        </div>
       </div>
 
       <Pagination
         length={images.length}
         setSlideIndex={setSlideIndex}
         setTransition={setTransition}
+        currentSlide={slideIndex}
       />
     </div>
   );

@@ -6,10 +6,11 @@ interface PaginationProps {
   length: number;
   setSlideIndex: React.Dispatch<React.SetStateAction<number>>;
   setTransition: React.Dispatch<React.SetStateAction<string>>;
+  currentSlide: number;
 }
 
 function Pagination(props: PaginationProps) {
-  const { length, setSlideIndex, setTransition } = props;
+  const { length, setSlideIndex, setTransition, currentSlide } = props;
 
   const slideNavigation = Array.from({ length })
     .fill(0)
@@ -25,11 +26,11 @@ function Pagination(props: PaginationProps) {
       {slideNavigation.map((slideNav) => (
         <li
           key={slideNav}
-          className={styles.nav}
+          className={`${currentSlide === slideNav ? styles.curr_nav : ""} ${
+            styles.nav
+          }`}
           onClick={() => onClickHandler(slideNav)}
-        >
-          {slideNav}
-        </li>
+        ></li>
       ))}
     </ol>
   );
