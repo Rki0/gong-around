@@ -1,0 +1,46 @@
+.section {
+  height: 100vh;
+  margin-top: 50px;
+}
+
+.btn_div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cancel_btn {
+  all: unset;
+  cursor: pointer;
+  padding: 5px 20px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  margin-right: 10px;
+  transition: all 150ms ease-in-out;
+
+  &:hover {
+    background-color: tomato;
+    color: white;
+  }
+}
+
+.submit_btn {
+  all: unset;
+  cursor: pointer;
+  padding: 5px 20px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  margin-right: 10px;
+  transition: all 150ms ease-in-out;
+
+  &:hover {
+    background-color: #00eaff;
+    color: white;
+  }
+}
+
+@media (min-width: 1024px) {
+  .section {
+    margin-top: 70px;
+  }
+}

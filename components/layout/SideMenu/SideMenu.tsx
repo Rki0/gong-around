@@ -22,6 +22,7 @@ const SideMenu = (props: SideMenuProps) => {
       <Navigation
         nav_style={styles.hamburger_menu}
         list_style={styles.hamburger_menu_list}
+        onClickHandler={props.toggleMenuHandler}
       />
     </div>
   );

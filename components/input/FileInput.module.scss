@@ -1,0 +1,65 @@
+.wrapper {
+  padding: 10px 0;
+  padding-left: 5px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+
+  input[type="file"] {
+    position: absolute;
+    width: 0;
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+  }
+}
+
+.input_wrapper {
+  margin-bottom: 5px;
+}
+
+.label {
+  margin-right: 15px;
+}
+
+.file_btn {
+  display: inline-block;
+  padding: 5px;
+  vertical-align: middle;
+  color: white;
+  background-color: #999999;
+  border-radius: 5px;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.input {
+  all: unset;
+  flex: 1;
+  padding: 10px;
+}
+
+.li {
+  display: flex;
+  align-items: center;
+
+  button {
+    all: unset;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+.file_name_div {
+  margin-right: 5px;
+
+  span:first-child {
+    margin-right: 5px;
+  }
+}

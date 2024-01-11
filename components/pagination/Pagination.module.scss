@@ -1,0 +1,26 @@
+.pagination {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.list_body {
+  list-style: none;
+  display: flex;
+  align-items: center;
+}
+
+.list_item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 25px;
+  height: 25px;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+.activated_page {
+  background-color: rgba(0, 0, 0, 0.3);
+}

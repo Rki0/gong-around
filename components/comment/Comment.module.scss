@@ -1,0 +1,130 @@
+.comment_div {
+  margin-bottom: 15px;
+}
+
+.comment_header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.comment_header_info {
+  display: flex;
+  align-items: center;
+}
+
+.comment_header_writer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3px;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+}
+
+.comment_header_options {
+  position: relative;
+}
+
+.comment_header_dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+
+  &:hover {
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+}
+
+.dots_options {
+  position: absolute;
+  right: 10px;
+  width: 50px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
+
+  button {
+    all: unset;
+    width: 100%;
+    text-align: center;
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+    transition: all 150ms ease-in-out;
+
+    &:hover {
+      cursor: pointer;
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}
+
+.update_comment_div {
+  display: flex;
+  flex-direction: column;
+}
+
+.hr {
+  margin-bottom: 5px;
+}
+
+.update_comment_btns {
+  display: flex;
+  justify-content: flex-end;
+
+  button {
+    all: unset;
+    padding: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    transition: all 150ms ease-in-out;
+    margin-bottom: 10px;
+
+    &:hover {
+      cursor: pointer;
+      color: white;
+      background-color: #55e1e1;
+    }
+
+    &:first-child {
+      margin-right: 5px;
+    }
+  }
+}
+
+.comment_like {
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.comment_footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 140px;
+}
+
+.subComment_summary {
+  all: unset;
+  display: flex;
+  align-items: center;
+  transition: all 150ms ease-in-out;
+  padding: 5px;
+
+  &:hover {
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+  }
+}

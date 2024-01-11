@@ -1,0 +1,72 @@
+.section {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+}
+
+.map_div {
+  // display: flex;
+  // flex-direction: column;
+  position: relative;
+}
+
+.marker {
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+}
+
+@media (min-width: 1024px) {
+  .section {
+    flex-direction: row-reverse;
+    margin-top: 70px;
+  }
+
+  .map_div {
+    width: 70%;
+    position: relative;
+  }
+
+  .markers_div {
+    overflow-x: hidden;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 30%;
+    height: 100vh;
+  }
+
+  .marker {
+    width: 100%;
+    padding: 10px 5px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  }
+
+  .marker_img {
+    padding-right: 10px;
+  }
+
+  .marker_content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    p {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+  }
+
+  .popularity {
+    display: flex;
+
+    p:first-child {
+      margin-right: 10px;
+    }
+  }
+}

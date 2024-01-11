@@ -1,0 +1,74 @@
+.input_div {
+  display: flex;
+}
+
+.input_div {
+  position: relative;
+}
+
+.input {
+  all: unset;
+  background-color: white;
+  padding: 5px;
+  border-radius: 5px;
+  width: 100%;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+.delete_icon {
+  position: absolute;
+  top: 3px;
+  right: 10px;
+}
+
+.ul {
+  list-style: none;
+  background-color: white;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+
+  li {
+    width: 100%;
+    padding: 5px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .auto_div {
+    position: absolute;
+    z-index: 100;
+    left: 50%;
+    transform: translateX(-40%);
+    margin-top: 10px;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1130px) {
+  .auto_div {
+    position: absolute;
+    z-index: 100;
+    left: 50%;
+    transform: translateX(-40%);
+    margin-top: 10px;
+    width: 300px;
+  }
+}
+
+@media (min-width: 1130px) {
+  .auto_div {
+    position: absolute;
+    z-index: 100;
+    left: 50%;
+    transform: translateX(-40%);
+    margin-top: 10px;
+    width: 500px;
+  }
+}

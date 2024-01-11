@@ -1,0 +1,37 @@
+.wrapper {
+  padding-left: 5px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.label {
+  margin-right: 5px;
+
+  span {
+    color: tomato;
+  }
+}
+
+.textarea_div {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.textarea {
+  all: unset;
+  padding: 10px;
+  width: 100%;
+  height: 250px;
+  box-sizing: border-box;
+}
+
+.byte {
+  text-align: end;
+}
+
+.byte_warn {
+  color: red;
+}

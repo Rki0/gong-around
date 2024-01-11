@@ -23,6 +23,7 @@ const Header = (props: HeaderProps) => {
       <Navigation
         nav_style={styles.float_menu}
         list_style={styles.float_menu_list}
+        onClickHandler={props.toggleMenuHandler}
       />
     </header>
   );
