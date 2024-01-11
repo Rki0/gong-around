@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 
 import { InputProps } from "@/types/input";
 
-import styles from "./Input.module.scss";
+import styles from "./TextInput.module.scss";
 
 function TextInput(props: InputProps) {
-  const { label, target, onInput } = props;
+  const { label, target, onInput, required } = props;
 
   const [inputState, setInputState] = useState("");
 
@@ -18,9 +18,11 @@ function TextInput(props: InputProps) {
   }, [inputState, onInput, target]);
 
   return (
-    <div>
+    <div className={styles.wrapper}>
       <label htmlFor={target} className={styles.label}>
         {label}
+
+        {required && <span>*</span>}
       </label>
       <input
         type="text"
@@ -28,6 +30,7 @@ function TextInput(props: InputProps) {
         className={styles.input}
         value={inputState}
         onChange={onChangeHandler}
+        required={required}
       />
     </div>
   );

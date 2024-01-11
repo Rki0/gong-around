@@ -3,10 +3,10 @@ import React, { useEffect, useState } from "react";
 import { getTodayDate } from "@/utils/getTodayDate";
 import { InputProps } from "@/types/input";
 
-import styles from "./Input.module.scss";
+import styles from "./DateInput.module.scss";
 
 function DateInput(props: InputProps) {
-  const { label, target, onInput } = props;
+  const { label, target, onInput, required } = props;
 
   const [inputState, setInputState] = useState("");
 
@@ -19,9 +19,11 @@ function DateInput(props: InputProps) {
   }, [inputState, onInput, target]);
 
   return (
-    <div>
+    <div className={styles.wrapper}>
       <label htmlFor={target} className={styles.label}>
         {label}
+
+        {required && <span>*</span>}
       </label>
       <input
         type="date"
@@ -29,6 +31,7 @@ function DateInput(props: InputProps) {
         className={styles.input}
         value={inputState}
         onChange={onChangeHandler}
+        required={required}
         max={getTodayDate()}
       />
     </div>

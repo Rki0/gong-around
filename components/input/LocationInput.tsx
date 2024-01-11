@@ -7,10 +7,10 @@ import usePlacesAutocomplete from "use-places-autocomplete";
 
 import { InputProps } from "@/types/input";
 
-import styles from "./Input.module.scss";
+import styles from "./LocationInput.module.scss";
 
 function LocationInput(props: InputProps) {
-  const { label, target, onInput } = props;
+  const { label, target, onInput, required } = props;
 
   const {
     ready,
@@ -37,20 +37,26 @@ function LocationInput(props: InputProps) {
   }, [value, onInput, target]);
 
   return (
-    <div>
-      <label htmlFor={target} className={styles.label}>
-        {label}
-      </label>
-      <input
-        type="text"
-        id={target}
-        value={value}
-        onChange={onChangeHandler}
-        disabled={!ready}
-        placeholder="장소를 검색해보세요."
-      />
+    <div className={styles.wrapper}>
+      <div className={styles.input_wrapper}>
+        <label htmlFor={target} className={styles.label}>
+          {label}
 
-      <ul>
+          {required && <span>*</span>}
+        </label>
+        <input
+          className={styles.input}
+          type="text"
+          id={target}
+          value={value}
+          onChange={onChangeHandler}
+          disabled={!ready}
+          required={required}
+          placeholder="장소를 검색해보세요."
+        />
+      </div>
+
+      <ul className={styles.ul}>
         {status === "OK" &&
           data.map(({ place_id, description }) => (
             <li key={place_id} onClick={onClickHandler}>

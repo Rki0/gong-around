@@ -1,4 +1,5 @@
-import React, { useCallback, useReducer, useState } from "react";
+import { useRouter } from "next/router";
+import React, { useCallback, useReducer } from "react";
 
 import Form from "@/components/form/Form";
 import TextInput from "@/components/input/TextInput";
@@ -8,17 +9,18 @@ import TextArea from "@/components/textArea/TextArea";
 import LocationInput from "@/components/input/LocationInput";
 import Button from "@/components/button/Button";
 import getGeoCoordinate from "@/utils/getGeoCoordinate";
+import useCreateFeedQuery from "@/query/useCreateFeedQuery";
 
 import styles from "./index.module.scss";
-import { useRouter } from "next/router";
 
 interface InitialState {
   [key: string]: any;
   title: string;
   date: string;
   location: string;
-  images: null | File[];
+  images: File[];
   description: string;
+  isValid: boolean;
 }
 
 interface Action {
@@ -30,6 +32,15 @@ interface Action {
 const reducer = (state: InitialState, action: Action) => {
   switch (action.type) {
     case "CHANGE_INPUT":
+      if (
+        state.title !== "" &&
+        state.date !== "" &&
+        state.location !== "" &&
+        state.description !== ""
+      ) {
+        state.isValid = true;
+      }
+
       return {
         ...state,
         [action.target]: action.payload,
@@ -45,8 +56,9 @@ function CreateFeedPage() {
     title: "",
     date: "",
     location: "",
-    images: null,
+    images: [],
     description: "",
+    isValid: false,
   });
 
   const inputChangeHandler = useCallback(
@@ -60,58 +72,40 @@ function CreateFeedPage() {
     []
   );
 
+  const createFeedMutation = useCreateFeedQuery();
+
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (!formState.isValid) {
+      return alert("등록된 정보가 부족합니다.");
+    }
+
     const geo = await getGeoCoordinate(formState.location);
 
-    // TODO: replace location which in fetch API body with newLocation
     const newLocation = {
       ...geo,
       address: formState.location,
     };
 
-    console.log(formState, newLocation);
+    const createdFeedData = { ...formState, location: newLocation };
 
-    return;
+    const formData = new FormData();
 
-    // TODO: 입력값 검증 로직 필요
-
-    // file이 있는 경우 = FormData
-    if (formState.images) {
-      const formData = new FormData();
-
-      for (let state in formState) {
+    for (let state in createdFeedData) {
+      if (state === "location") {
+        // to save Object in FormData
+        formData.append(state, JSON.stringify(createdFeedData.location));
+      } else if (state === "images") {
+        for (let i = 0; i < formState[state].length; i++) {
+          formData.append(state, formState[state][i]);
+        }
+      } else {
         formData.append(state, formState[state]);
       }
-
-      formData.append("writer", "TEST_USER");
-
-      fetch(`${process.env.APP_BACKEND}/feed/post`, {
-        method: "POST",
-        body: formData,
-      });
     }
 
-    // file이 없는 경우 = JSON.stringify
-    if (!formState.images) {
-      const data = {
-        title: formState.title,
-        date: formState.date,
-        images: formState.images,
-        location: formState.location,
-        description: formState.description,
-        writer: "TEST_USER",
-      };
-
-      fetch(`${process.env.APP_BACKEND}/feed/post`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-    }
+    createFeedMutation(formData);
   };
 
   const router = useRouter();
@@ -123,9 +117,19 @@ function CreateFeedPage() {
   return (
     <section className={styles.section}>
       <Form onSubmitHandler={submitHandler}>
-        <TextInput label="제목" target="title" onInput={inputChangeHandler} />
+        <TextInput
+          label="제목"
+          target="title"
+          onInput={inputChangeHandler}
+          required={true}
+        />
 
-        <DateInput label="날짜" target="date" onInput={inputChangeHandler} />
+        <DateInput
+          label="날짜"
+          target="date"
+          onInput={inputChangeHandler}
+          required={true}
+        />
 
         {/* TODO: 어떤 나라, 어떤 공항에 대한 것인지 선택할 수 있도록 하자. */}
 
@@ -133,6 +137,7 @@ function CreateFeedPage() {
           label="장소"
           target="location"
           onInput={inputChangeHandler}
+          required={true}
         />
 
         <FileInput label="파일" target="images" onInput={inputChangeHandler} />
@@ -141,12 +146,21 @@ function CreateFeedPage() {
           label="내용"
           target="description"
           onInput={inputChangeHandler}
+          required={true}
         />
 
-        <Button type="button" onClickHandler={cancelHandler}>
-          취소
-        </Button>
-        <Button type="submit">등록</Button>
+        <div className={styles.btn_div}>
+          <Button
+            type="button"
+            onClickHandler={cancelHandler}
+            style={styles.cancel_btn}
+          >
+            취소
+          </Button>
+          <Button type="submit" style={styles.submit_btn}>
+            등록
+          </Button>
+        </div>
       </Form>
     </section>
   );
